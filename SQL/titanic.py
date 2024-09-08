@@ -1,6 +1,7 @@
 import sqlite3
 import pandas as pd
 
+# Creating the connection to the database and the cursor
 conn = sqlite3.connect('titanic.sqlite3')
 curs = conn.cursor()
 
