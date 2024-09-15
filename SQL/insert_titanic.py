@@ -1,20 +1,23 @@
 import pandas as pd
 import psycopg2
-
 from os import getenv
 
 
 # "User & Default Database" from Elephant
 DBNAME = 'psthuxpu'
 USER = 'psthuxpu'
+
 # "Password" from Elephant
 PASSWORD = 'zxFmABhuwumP8sRLEpZMr3a47ldLY4F-'
+
 # "Server" from Elephant 
 HOST = 'bubble.db.elephantsql.com'
 
+# Create cursor and connection
 pg_conn = psycopg2.connect(dbname=DBNAME, user=USER, password=PASSWORD, host=HOST)
 pg_curs = pg_conn.cursor()
 
+# Creation of the table and calling all columns
 TITANIC_TABLE = '''
 CREATE TABLE IF NOT EXISTS titanic_table(
     passenger_id SERIAL PRIMARY KEY,
@@ -29,7 +32,7 @@ CREATE TABLE IF NOT EXISTS titanic_table(
 );
 '''
 
-
+# Calling function that will gather wanted data through queries
 def execute_query_pg(curs, conn, query):
     results = curs.execute(query)
     conn.commit()
@@ -40,6 +43,8 @@ df = pd.read_csv('titanic.csv')
 df['Name'] = df['Name'].str.replace("'", '')
 df.drop(columns=['Ticket', 'Cabin', 'Embarked'], inplace=True)
 df.fillna(0, inplace=True)
+
+# Initializing the connection and cursor from first call of dataset
 if __name__ == '__main__':
 
     execute_query_pg(pg_curs, pg_conn, '''
